@@ -10,6 +10,9 @@ node_modules/
 packages/**/*.d.ts
 packages/**/*.js
 
+
+.env
+
 # misc
 .DS_Store
 lerna-debug.log

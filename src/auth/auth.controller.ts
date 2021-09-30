@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 
+import { goodResponse, badResponse } from '../core/utils/functions'
+
 import User from './model/User'
 
 export default class AuthController {
@@ -21,39 +23,46 @@ export default class AuthController {
       const usernameExist = await User.findOne({ username })
 
       if (emailExist) {
-        return res.status(404).send({
-          code: 404,
-          success: false,
-          message: 'Email aleady exist!!',
-          data: null,
-        })
+        return badResponse(res, 404, 'Email aleady exist!!')
       }
       if (usernameExist) {
-        return res.status(404).send({
-          code: 404,
-          success: false,
-          message: 'Username taken!!',
-          data: null,
-        })
+        return badResponse(res, 404, 'Username taken!!')
       }
 
       await user.save()
-      return res.send({
-        code: 201,
-        success: true,
-        message: 'success',
-        data: user,
-      })
+      return goodResponse(res, user)
     } catch (error) {
       console.error(error)
-      return res.status(500).send({
-        code: 500,
-        success: false,
-        message: 'Internal Server Error',
-        data: null,
-      })
+      return badResponse(res, 500, 'Internal Server Error')
     }
   }
 
-  async login(req: Request, res: Response) {}
+  async login(req: Request, res: Response) {
+    let { username, email, password } = req.body
+
+    try {
+      let user
+
+      if (!email) {
+        user = await User.findOne({ username })
+
+        if (!user) return NotFound(res)
+      } else {
+        user = await User.findOne({ email })
+        if (!user) return NotFound(res)
+      }
+
+      const check = await bcrypt.compare(password, user.password!)
+
+      if (!check)
+        return badResponse(res, 400, 'Invalid email/username/password')
+
+      return goodResponse(res, user)
+    } catch (error) {
+      console.log(error)
+      return badResponse(res, 500, 'Intenal server error')
+    }
+  }
 }
+
+const NotFound = (res: Response) => badResponse(res, 404, 'User not found')

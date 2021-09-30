@@ -1,10 +1,11 @@
 import dotenv from 'dotenv'
 dotenv.config()
+
 import DatabaseConfiguration from './config/db'
 import serve from './config/server'
 
 //*Load variables from enviorment file
-const port: string = process.env.PORT || '4000'
+const port: string = process.env.PORT || '4000' //!REMOVE PORT FROM .env DURING DEPLOYMENT
 const url = <string>(
   process.env.DB_URL?.replace('<password>', <string>process.env.DB_PASSWORD)
 )
@@ -15,8 +16,7 @@ if (typeof url != 'string') {
   process.exit(1)
 }
 
-//*Start Database
-DatabaseConfiguration.getInstance().config(url)
-
-//*Start server
-serve(port)
+//*Open database and then start server
+DatabaseConfiguration.getInstance()
+  .config(url)
+  .then(() => serve(port))
