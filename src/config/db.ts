@@ -14,7 +14,7 @@ export default class DatabaseConfiguration {
   public config(url: string): Promise<void> {
     return mongoose
       .connect(url)
-      .then(() => console.log(`Connected to mongo db`))
+      .then(() => console.log(`Hola! Connected to mongo db`))
       .catch((err) => {
         console.log(err)
         process.exit(1)
