@@ -1,5 +1,6 @@
-### Food Ordering App
+# PandaChef
 
 
-This backend employes principles of clean architecture and proper testing of webapis.
-
+ ## Backend Application for PandaChef Application
+ 
+ Made using TYpescript
