@@ -1,25 +1,3 @@
-# dependencies
-node_modules/
-
-# IDE
-/.idea
-/.vscode
-*.code-workspace
-
-# bundle
-packages/**/*.d.ts
-packages/**/*.js
-
-
+.vscode
+node_modules
 .env
-
-# misc
-.DS_Store
-lerna-debug.log
-npm-debug.log
-yarn-error.log
-/**/npm-debug.log
-/packages/**/.npmignore
-/packages/**/LICENSE
-
-
